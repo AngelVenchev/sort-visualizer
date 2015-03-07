@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Sort Visualizer</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string-array name="sort_types">
+        <item>Selection Sort</item>
+        <item>Bubble Sort</item>
+    </string-array>
+</resources>
