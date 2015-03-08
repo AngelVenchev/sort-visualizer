@@ -1,11 +1,13 @@
 package org.intracode.sortvisualizer;
 
+import android.content.OperationApplicationException;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.intracode.sortvisualizer.connectionMachine.communication.DisplayWriter;
 import org.intracode.sortvisualizer.connectionMachine.transformator.ArrayTransformer;
@@ -44,7 +46,8 @@ public class Controller extends ActionBarActivity {
     @Override
     public void onPause() {
         super.onPause();
-        writer.close();
+        if(writer != null)
+            writer.close();
     }
 
     public void onClickStop(View v) {
@@ -53,7 +56,14 @@ public class Controller extends ActionBarActivity {
     }
 
     public void onClickStart(View v) {
-        SortAlgorithm[] sorts = getSortAlgorithms();
+        SortAlgorithm[] sorts;
+        try {
+            sorts = getSortAlgorithms();
+        } catch (OperationApplicationException ex) {
+            Toast toast = Toast.makeText(this, ex.getMessage(), Toast.LENGTH_SHORT);
+            toast.show();
+            return;
+        }
 
         // Run sorts
         ArrayList<List<SortStep>> stepsCollection = getStepsCollection(sorts);
@@ -75,18 +85,21 @@ public class Controller extends ActionBarActivity {
         return stepsCollection;
     }
 
-    private SortAlgorithm[] getSortAlgorithms() {
+    private SortAlgorithm[] getSortAlgorithms() throws OperationApplicationException {
         topLeft = (Spinner) findViewById(R.id.top_left_spinner);
         topRight = (Spinner) findViewById(R.id.top_right_spinner);
         bottomLeft = (Spinner) findViewById(R.id.bottom_left_spinner);
         bottomRight = (Spinner) findViewById(R.id.bottom_right_spinner);
 
         // Get sorts
-        topLeftSort = SortAlgorithmSelector.getSortAlgorithm(topLeft.getSelectedItem().toString());
-        topRightSort = SortAlgorithmSelector.getSortAlgorithm(topRight.getSelectedItem().toString());
-        bottomLeftSort = SortAlgorithmSelector.getSortAlgorithm(bottomLeft.getSelectedItem().toString());
-        bottomRightSort = SortAlgorithmSelector.getSortAlgorithm(bottomRight.getSelectedItem().toString());
-
+        try {
+            topLeftSort = SortAlgorithmSelector.getSortAlgorithm(topLeft.getSelectedItem().toString());
+            topRightSort = SortAlgorithmSelector.getSortAlgorithm(topRight.getSelectedItem().toString());
+            bottomLeftSort = SortAlgorithmSelector.getSortAlgorithm(bottomLeft.getSelectedItem().toString());
+            bottomRightSort = SortAlgorithmSelector.getSortAlgorithm(bottomRight.getSelectedItem().toString());
+        } catch (UnsupportedOperationException ex) {
+            throw new OperationApplicationException("A sorting algorithm was chosen that is not yet supported");
+        }
         return new SortAlgorithm[] { topLeftSort, topRightSort, bottomLeftSort, bottomRightSort };
     }
 
