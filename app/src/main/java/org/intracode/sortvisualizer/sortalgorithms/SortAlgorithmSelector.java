@@ -8,7 +8,7 @@ public class SortAlgorithmSelector {
         if(algorithmName.compareTo("Selection Sort") == 0) {
             return new SelectionSort();
         } else if(algorithmName.compareTo("Bubble Sort") == 0) {
-            throw new UnsupportedOperationException();
+            return new BubbleSort();
         } else {
             return new SelectionSort();
         }

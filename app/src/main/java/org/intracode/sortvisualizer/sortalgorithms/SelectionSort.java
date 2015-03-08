@@ -1,7 +1,6 @@
 package org.intracode.sortvisualizer.sortalgorithms;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,6 +38,8 @@ public class SelectionSort implements SortAlgorithm{
                 sortSteps.add(new SortStep(numbers, new int[]{minIndex, i}));
             }
         }
+        sortSteps.add(new SortStep(numbers));
+        sortSteps.add(new SortStep(numbers));
         sortSteps.add(new SortStep(numbers));
     }
 }

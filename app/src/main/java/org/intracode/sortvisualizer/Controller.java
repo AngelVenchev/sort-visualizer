@@ -31,10 +31,24 @@ public class Controller extends ActionBarActivity {
     SortAlgorithm bottomRightSort;
     int[] numbers;
 
+    DisplayWriter writer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
+
+        numbers = NumbersManipulator.getRandomNumbers();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        writer.close();
+    }
+
+    public void onClickStop(View v) {
+        writer.close();
     }
 
     public void onClickStart(View v) {
@@ -48,14 +62,14 @@ public class Controller extends ActionBarActivity {
         byte[][] readyFrames = transformer.GetFramesAsByteArrays(stepsCollection);
 
         // Transmit to CM
-        DisplayWriter writer = new DisplayWriter();
+        writer = new DisplayWriter();
         writer.write(readyFrames, Controller.this);
     }
 
     private ArrayList<List<SortStep>> getStepsCollection(SortAlgorithm[] sorts) {
-        ArrayList<List<SortStep>> stepsCollection = new ArrayList<List<SortStep>>();
-        for(int i = 0; i < sorts.length; i++) {
-            stepsCollection.add(sorts[i].SortSteps(numbers));
+        ArrayList<List<SortStep>> stepsCollection = new ArrayList<>();
+        for (SortAlgorithm sort : sorts) {
+            stepsCollection.add(sort.SortSteps(numbers));
         }
         return stepsCollection;
     }
@@ -94,7 +108,7 @@ public class Controller extends ActionBarActivity {
     public void displaySetup() {
         SortStep step = new SortStep(numbers);
         ArrayList<List<SortStep>> frames = new ArrayList<>();
-        final int temporaryFrameCount = 10;
+        final int temporaryFrameCount = 5;
         final int numberOfDisplays = 4;
         for(int i = 0; i < numberOfDisplays; i++) {
             ArrayList<SortStep> oneDisplay = new ArrayList<>();
@@ -106,7 +120,7 @@ public class Controller extends ActionBarActivity {
         ArrayTransformer transformer = new ArrayTransformer();
         byte[][] framesAsBytes = transformer.GetFramesAsByteArrays(frames);
 
-        DisplayWriter writer = new DisplayWriter();
+        writer = new DisplayWriter();
         writer.write(framesAsBytes, this);
     }
 

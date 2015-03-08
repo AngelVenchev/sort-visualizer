@@ -68,4 +68,8 @@ public class DisplayWriter {
         // Start sending thread.
         sender.start();
     }
+
+    public void close() {
+        BT.closeConnection();
+    }
 }

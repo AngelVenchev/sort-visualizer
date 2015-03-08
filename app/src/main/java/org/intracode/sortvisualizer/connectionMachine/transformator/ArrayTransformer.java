@@ -23,14 +23,14 @@ public class ArrayTransformer {
      */
     public byte[][] GetFramesAsByteArrays(ArrayList<List<SortStep>> collectionOfFrames) {
         byte[][][] topLeftBytes = ConvertSingleSortVisualization(collectionOfFrames.get(0));
-        byte[][][] topRightBytes = ConvertSingleSortVisualization(collectionOfFrames.get(0));
-        byte[][][] bottomLeftBytes = ConvertSingleSortVisualization(collectionOfFrames.get(0));
-        byte[][][] bottomRightBytes = ConvertSingleSortVisualization(collectionOfFrames.get(0));
+        byte[][][] topRightBytes = ConvertSingleSortVisualization(collectionOfFrames.get(1));
+        byte[][][] bottomLeftBytes = ConvertSingleSortVisualization(collectionOfFrames.get(2));
+        byte[][][] bottomRightBytes = ConvertSingleSortVisualization(collectionOfFrames.get(3));
 
-        byte[][][] combinedPicture = combineAllScreens(topLeftBytes, topRightBytes, bottomLeftBytes, bottomRightBytes);
-        byte[][] readyFrames = transformTwoDimensionArrayCollectionToSingleDimension(combinedPicture);
+        byte[][][] combinedPicture;
+        combinedPicture = combineAllScreens(topLeftBytes, topRightBytes, bottomLeftBytes, bottomRightBytes);
 
-        return readyFrames;
+        return transformTwoDimensionArrayCollectionToSingleDimension(combinedPicture);
     }
 
     private byte[][][] ConvertSingleSortVisualization(List<SortStep> sortSteps) {
@@ -69,15 +69,15 @@ public class ArrayTransformer {
     }
 
     private byte[][][] combineAllScreens(byte[][][] frameCollection1,
-                                        byte[][][] frameCollection2,
-                                        byte[][][] frameCollection3,
-                                        byte[][][] frameCollection4) {
+                                         byte[][][] frameCollection2,
+                                         byte[][][] frameCollection3,
+                                         byte[][][] frameCollection4) {
         int length1 = Math.max(frameCollection1.length, frameCollection2.length);
         int length2 = Math.max(frameCollection3.length, frameCollection4.length);
         int numberOfFrames = Math.max(length1, length2);
         byte[][][] combinedScreens = new byte[numberOfFrames][ALL_ROWS][ALL_ROWS];
 
-        byte[][][][] collections = new byte[][][][] {frameCollection1, frameCollection2, frameCollection3, frameCollection4};
+        byte[][][][] collections = new byte[][][][] {frameCollection1, frameCollection3, frameCollection2, frameCollection4};
 
         for(int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++) {
             int[] currentFrame = new int[]{frameIndex, frameIndex, frameIndex, frameIndex};
