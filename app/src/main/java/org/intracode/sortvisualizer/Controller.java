@@ -5,12 +5,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Spinner;
 
 import org.intracode.sortvisualizer.connectionMachine.communication.DisplayWriter;
 import org.intracode.sortvisualizer.connectionMachine.transformator.ArrayTransformer;
-import org.intracode.sortvisualizer.sortalgorithms.SelectionSort;
+import org.intracode.sortvisualizer.sortalgorithms.NumbersManipulator;
 import org.intracode.sortvisualizer.sortalgorithms.SortAlgorithm;
 import org.intracode.sortvisualizer.sortalgorithms.SortAlgorithmSelector;
 import org.intracode.sortvisualizer.sortalgorithms.SortStep;
@@ -25,10 +24,6 @@ public class Controller extends ActionBarActivity {
     Spinner topRight;
     Spinner bottomLeft;
     Spinner bottomRight;
-    Button reversed;
-    Button nearlySorted;
-    Button random;
-    Button start;
 
     SortAlgorithm topLeftSort;
     SortAlgorithm topRightSort;
@@ -40,43 +35,79 @@ public class Controller extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_controller);
+    }
 
-        reversed = (Button) findViewById(R.id.reversed);
-        nearlySorted = (Button) findViewById(R.id.nearly_sorted);
-        random = (Button) findViewById(R.id.random);
-        start = (Button) findViewById(R.id.start_button);
+    public void onClickStart(View v) {
+        SortAlgorithm[] sorts = getSortAlgorithms();
 
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            topLeft = (Spinner) findViewById(R.id.top_left_spinner);
-            topRight = (Spinner) findViewById(R.id.top_right_spinner);
-            bottomLeft = (Spinner) findViewById(R.id.bottom_left_spinner);
-            bottomRight = (Spinner) findViewById(R.id.bottom_right_spinner);
+        // Run sorts
+        ArrayList<List<SortStep>> stepsCollection = getStepsCollection(sorts);
 
-            // Get sorts
-            topLeftSort = SortAlgorithmSelector.getSortAlgorithm(topLeft.getSelectedItem().toString());
-            topRightSort = SortAlgorithmSelector.getSortAlgorithm(topRight.getSelectedItem().toString());
-            bottomLeftSort = SortAlgorithmSelector.getSortAlgorithm(bottomLeft.getSelectedItem().toString());
-            bottomRightSort = SortAlgorithmSelector.getSortAlgorithm(bottomRight.getSelectedItem().toString());
+        // Transform frames into transmittable messages
+        ArrayTransformer transformer = new ArrayTransformer();
+        byte[][] readyFrames = transformer.GetFramesAsByteArrays(stepsCollection);
 
-            SortAlgorithm[] sorts = new SortAlgorithm[] { topLeftSort, topRightSort, bottomLeftSort, bottomRightSort };
+        // Transmit to CM
+        DisplayWriter writer = new DisplayWriter();
+        writer.write(readyFrames, Controller.this);
+    }
 
-            // Run sorts
-            ArrayList<List<SortStep>> stepsCollection = new ArrayList<List<SortStep>>();
-            for(int i = 0; i < sorts.length; i++) {
-                stepsCollection.add(sorts[i].SortSteps(new int[]{ 8,12,6,5,3,2,11,4,9,10,1,7 }));
+    private ArrayList<List<SortStep>> getStepsCollection(SortAlgorithm[] sorts) {
+        ArrayList<List<SortStep>> stepsCollection = new ArrayList<List<SortStep>>();
+        for(int i = 0; i < sorts.length; i++) {
+            stepsCollection.add(sorts[i].SortSteps(numbers));
+        }
+        return stepsCollection;
+    }
+
+    private SortAlgorithm[] getSortAlgorithms() {
+        topLeft = (Spinner) findViewById(R.id.top_left_spinner);
+        topRight = (Spinner) findViewById(R.id.top_right_spinner);
+        bottomLeft = (Spinner) findViewById(R.id.bottom_left_spinner);
+        bottomRight = (Spinner) findViewById(R.id.bottom_right_spinner);
+
+        // Get sorts
+        topLeftSort = SortAlgorithmSelector.getSortAlgorithm(topLeft.getSelectedItem().toString());
+        topRightSort = SortAlgorithmSelector.getSortAlgorithm(topRight.getSelectedItem().toString());
+        bottomLeftSort = SortAlgorithmSelector.getSortAlgorithm(bottomLeft.getSelectedItem().toString());
+        bottomRightSort = SortAlgorithmSelector.getSortAlgorithm(bottomRight.getSelectedItem().toString());
+
+        return new SortAlgorithm[] { topLeftSort, topRightSort, bottomLeftSort, bottomRightSort };
+    }
+
+    public void onClickSetNumbers(View v) {
+        switch (v.getId()) {
+            case R.id.nearly_sorted:
+                numbers = NumbersManipulator.getNearlySortedNumbers();
+                break;
+            case R.id.random:
+                numbers = NumbersManipulator.getRandomNumbers();
+                break;
+            case R.id.reversed:
+                numbers = NumbersManipulator.getReversedNumbers();
+                break;
+        }
+        displaySetup();
+    }
+
+    // Create a step for every display and repeat it multiple times.
+    public void displaySetup() {
+        SortStep step = new SortStep(numbers);
+        ArrayList<List<SortStep>> frames = new ArrayList<>();
+        final int temporaryFrameCount = 10;
+        final int numberOfDisplays = 4;
+        for(int i = 0; i < numberOfDisplays; i++) {
+            ArrayList<SortStep> oneDisplay = new ArrayList<>();
+            for(int k = 0; k < temporaryFrameCount; k++) {
+                oneDisplay.add(step);
             }
+            frames.add(oneDisplay);
+        }
+        ArrayTransformer transformer = new ArrayTransformer();
+        byte[][] framesAsBytes = transformer.GetFramesAsByteArrays(frames);
 
-            // Transform frames into transmittable messages
-            ArrayTransformer transformer = new ArrayTransformer();
-            byte[][] readyFrames = transformer.GetFramesAsByteArrays(stepsCollection);
-
-            // Transmit to CM
-            DisplayWriter writer = new DisplayWriter();
-            writer.Write(readyFrames, Controller.this);
-            }
-        });
+        DisplayWriter writer = new DisplayWriter();
+        writer.write(framesAsBytes, this);
     }
 
     @Override

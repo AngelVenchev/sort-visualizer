@@ -102,7 +102,8 @@
                 android:text="Reversed"
                 android:id="@+id/reversed"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:onClick="onClickSetNumbers" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -110,7 +111,8 @@
                 android:text="Nearly Sorted"
                 android:id="@+id/nearly_sorted"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:onClick="onClickSetNumbers" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -118,7 +120,8 @@
                 android:text="Random"
                 android:id="@+id/random"
                 android:layout_marginLeft="5dp"
-                android:layout_marginRight="5dp" />
+                android:layout_marginRight="5dp"
+                android:onClick="onClickSetNumbers" />
 
         </LinearLayout>
     </LinearLayout>
@@ -146,7 +149,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:onClick="onClickStart" />
     </LinearLayout>
 
 </LinearLayout>

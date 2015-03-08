@@ -16,7 +16,7 @@ public class DisplayWriter {
 
     protected static final String APP_NAME = "SortVisualizer";
 
-    public void Write(final byte[][] messageFrames, Context context) {
+    public void write(final byte[][] messageFrames, Context context) {
         BT = new LEDMatrixBTConn(context, REMOTE_BT_DEVICE_NAME, X_SIZE, Y_SIZE, COLOR_MODE, APP_NAME);
 
         if (!BT.prepare() || !BT.checkIfDeviceIsPaired()) {
