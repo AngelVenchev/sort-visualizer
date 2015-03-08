@@ -26,11 +26,12 @@ public class BubbleSort implements SortAlgorithm {
             for(int k = 0; k < numbers.length - i - 1; k++) {
                 sortSteps.add(new SortStep(numbers, new int[] {k, k+1}));
                 if(numbers[k] > numbers[k+1]) {
+                    sortSteps.add(new SortStep(numbers, new int[] {k, k+1}));
                     int swap = numbers[k];
                     numbers[k] = numbers[k+1];
                     numbers[k+1] = swap;
+                    sortSteps.add(new SortStep(numbers, new int[] {k, k+1}));
                 }
-                sortSteps.add(new SortStep(numbers, new int[] {k, k+1}));
             }
         }
         sortSteps.add(new SortStep(numbers));

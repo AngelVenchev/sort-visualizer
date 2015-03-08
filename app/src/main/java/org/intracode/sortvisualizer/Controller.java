@@ -48,7 +48,8 @@ public class Controller extends ActionBarActivity {
     }
 
     public void onClickStop(View v) {
-        writer.close();
+        if(writer != null)
+            writer.close();
     }
 
     public void onClickStart(View v) {

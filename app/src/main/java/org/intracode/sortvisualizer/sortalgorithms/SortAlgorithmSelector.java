@@ -9,6 +9,12 @@ public class SortAlgorithmSelector {
             return new SelectionSort();
         } else if(algorithmName.compareTo("Bubble Sort") == 0) {
             return new BubbleSort();
+        } else if(algorithmName.compareTo("Insertion Sort") == 0) {
+            throw new UnsupportedOperationException();
+        } else if(algorithmName.compareTo("Merge Sort") == 0) {
+            throw new UnsupportedOperationException();
+        } else if(algorithmName.compareTo("Quick Sort") == 0) {
+            throw new UnsupportedOperationException();
         } else {
             return new SelectionSort();
         }
