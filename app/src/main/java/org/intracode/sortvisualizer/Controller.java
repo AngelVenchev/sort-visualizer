@@ -7,6 +7,11 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import org.intracode.sortvisualizer.sortalgorithms.SelectionSort;
+import org.intracode.sortvisualizer.sortalgorithms.SortStep;
+
+import java.util.List;
+
 
 public class Controller extends ActionBarActivity {
 
