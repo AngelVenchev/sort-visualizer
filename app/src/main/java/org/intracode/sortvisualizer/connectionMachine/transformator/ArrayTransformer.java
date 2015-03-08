@@ -77,7 +77,7 @@ public class ArrayTransformer {
         int numberOfFrames = Math.max(length1, length2);
         byte[][][] combinedScreens = new byte[numberOfFrames][ALL_ROWS][ALL_ROWS];
 
-        byte[][][][] collections = new byte[][][][] {frameCollection1, frameCollection3, frameCollection2, frameCollection4};
+        byte[][][][] collections = new byte[][][][] {frameCollection3, frameCollection1, frameCollection4, frameCollection2};
 
         for(int frameIndex = 0; frameIndex < numberOfFrames; frameIndex++) {
             int[] currentFrame = new int[]{frameIndex, frameIndex, frameIndex, frameIndex};
