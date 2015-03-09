@@ -16,6 +16,8 @@ public class MergeSort implements SortAlgorithm {
         this.numbers = numbers.clone();
         sortSteps = new ArrayList<>();
         sortAndSaveSteps(0, this.numbers.length - 1);
+        sortSteps.add(new SortStep(this.numbers));
+        sortSteps.add(new SortStep(this.numbers));
         return sortSteps;
     }
 

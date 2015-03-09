@@ -10,7 +10,7 @@ public class SortAlgorithmSelector {
         } else if(algorithmName.compareTo("Bubble Sort") == 0) {
             return new BubbleSort();
         } else if(algorithmName.compareTo("Insertion Sort") == 0) {
-            throw new UnsupportedOperationException();
+            return new InsertionSort();
         } else if(algorithmName.compareTo("Merge Sort") == 0) {
             return new MergeSort();
         } else if(algorithmName.compareTo("Quick Sort") == 0) {
