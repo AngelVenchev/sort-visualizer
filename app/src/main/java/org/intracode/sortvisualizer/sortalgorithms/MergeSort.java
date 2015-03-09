@@ -44,6 +44,7 @@ public class MergeSort implements SortAlgorithm {
             sortAndSaveSteps(min, mid);//sort the left side
             sortAndSaveSteps(mid + 1, max);//sort the right side
             merge(min, max, mid);//combines them
+            addNumbersInRange(min, max);
         }
     }
 
@@ -95,9 +96,7 @@ public class MergeSort implements SortAlgorithm {
     void push(int s,int e){
         for(int i = s; i < e; i++){
             if(numbers[i] > numbers[i + 1])
-                sortSteps.add(new SortStep(numbers, new int[] {i, i + 1}));
                 swap(i, i + 1);
-                sortSteps.add(new SortStep(numbers, new int[] {i, i + 1}));
         }
     }
 
